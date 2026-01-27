@@ -253,8 +253,8 @@ app.get("/", (req, res) => {
 <title>${isNacional ? "Registro Nacional" : "Fin de Corte"}</title>
 <style>
   :root{
-    --primary: ${isNacional ? "#d85b00" : "#1d4ed8"};
-    --soft: ${isNacional ? "rgba(216,91,0,.12)" : "rgba(29,78,216,.12)"};
+    --primary: ${isNacional ? "#d85b00" : "#f53011"};
+    --soft: ${isNacional ? "rgba(255, 0, 0, 0.12)" : "rgba(91, 255, 14, 0.12)"};
   }
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui;background:#f5f7fb;padding:18px;}
   .card{background:#fff;padding:24px;border-radius:20px;box-shadow:0 18px 45px rgba(0,0,0,.12);width:100%;max-width:560px;}
@@ -274,7 +274,7 @@ app.get("/", (req, res) => {
 <body>
   <div class="card">
     <div class="badge">${isNacional ? "Nacional" : "Fin de corte"}</div>
-    <h1>${isNacional ? "REGISTRO NACIONAL" : "FIN DE CORTE — REGISTRO"}</h1>
+    <h1>${isNacional ? "REGISTRO NACIONAL / Prestige 2" : "FIN DE CORTE — REGISTRO - Prestige 2"}</h1>
 
     <div style="
   display: grid;
