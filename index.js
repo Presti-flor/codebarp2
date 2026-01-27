@@ -66,94 +66,122 @@ const BLOQUE_CONFIG = {
     fin_corte: ["vendela|na", "pink floyd|na"],
     nacional: ["vendela", "pink floyd"],
   },
-  "1.1": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
-    nacional: ["freedom"],
-  },
+
   "2": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
-    nacional: ["freedom"],
+    fin_corte: ["coral reff|na", "hummer|na"],
+    nacional: ["coral reff", "hummer"],
   },
+
   "3": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
-    nacional: ["freedom"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+      "momentum|na",
+      "pink floyd|na",
+      "quick sand|na",
+    ],
+    nacional: ["freedom", "momentum", "pink floyd", "quick sand"],
   },
+
   "4": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
-    nacional: ["freedom"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+      "hilux|na",
+    ],
+    nacional: ["freedom", "hilux"],
   },
+
   "5": {
     fin_corte: [
       "freedom|largo",
       "freedom|corto",
       "freedom|ruso",
-      "queen berry|na",
-      "queen berry|ruso",
-      "moody blue|na",
-      "moody blue|ruso",
-      "pink mondial|na",
-      "white ohora|na",
-      "pink ohora|na",
     ],
-    nacional: ["freedom", "queen berry", "moody blue", "pink mondial", "white ohora", "pink ohora"],
+    nacional: ["freedom"],
   },
+
   "6": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
 
   "7": {
     fin_corte: [
-      "mondial|na",
-      "mondial|ruso",
-      "queen berry|na",
-      "queen berry|ruso",
-      "momentum|na",
-      "momentum|ruso",
-      "moody blue|na",
-      "moody blue|ruso",
+      "candlelight|na",
+      "deep purple|na",
     ],
-    nacional: ["mondial", "queen berry", "momentum", "moody blue"],
+    nacional: ["candlelight", "deep purple"],
   },
 
   "8": {
     fin_corte: [
-      "vendela|na",
-      "quick sand|na",
-      "tifany|na",
-      "yellow bikini|na",
+      "candlelight|na",
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+      "sommersand|na",
+      "star platinum|na",
     ],
-    nacional: ["vendela", "quick sand", "tifany", "yellow bikini"],
+    nacional: [
+      "candlelight",
+      "freedom",
+      "sommersand",
+      "star platinum",
+    ],
   },
 
   "9": {
     fin_corte: [
-      "vendela|na",
-      "coral reff|na",
-      "coral reff|ruso",
-      "pink floyd|na",
-      "pink floyd|ruso",
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
     ],
-    nacional: ["vendela", "coral reff", "pink floyd"],
+    nacional: ["freedom"],
   },
 
   "10": {
     fin_corte: [
-      "mondial|na",
-      "hummer|na",
-      "hilux|na",
-      "blessing|na",
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+      "shimmer|na",
     ],
-    nacional: ["mondial", "hummer", "hilux", "blessing"],
+    nacional: ["freedom", "shimmer"],
   },
 
   "11": {
-    fin_corte: ["vendela|na"],
-    nacional: ["vendela"],
+    fin_corte: [
+      "mondial|na",
+      "pink ohora|na",
+      "white ohora|na",
+      "pink mondial|na",
+    ],
+    nacional: ["mondial", "pink ohora", "white ohora", "pink mondial"],
   },
 
   "12": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "blessing|na",
+      "mondial|na",
+      "pink amareto|na",
+      "sommersand|na",
+    ],
+    nacional: ["blessing", "mondial", "pink amareto", "sommersand"],
+  },
+
+  "13": {
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
 };
