@@ -253,7 +253,7 @@ app.get("/", (req, res) => {
 <title>${isNacional ? "Registro Nacional" : "Fin de Corte"}</title>
 <style>
   :root{
-    --primary: ${isNacional ? "#ff0000" : "#52f511"};
+    --primary: ${isNacional ? "#ff0000" : "#f51111"};
     --soft: ${isNacional ? "rgba(255, 0, 0, 0.12)" : "rgba(91, 255, 14, 0.12)"};
   }
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui;background:#f5f7fb;padding:18px;}
@@ -274,7 +274,7 @@ app.get("/", (req, res) => {
 <body>
   <div class="card">
     <div class="badge">${isNacional ? "Nacional" : "Fin de corte"}</div>
-    <h1>${isNacional ? "REGISTRO NACIONAL / Prestige 2" : "FIN DE CORTE — REGISTRO - Prestige 2"}</h1>
+    <h1>${isNacional ? "NACIONAL / Prestige 2" : "FIN DE CORTE - Prestige 2"}</h1>
 
     <div style="
   display: grid;
@@ -305,7 +305,7 @@ app.get("/", (req, res) => {
       font-weight: 900;
       letter-spacing: 0.18em;
       line-height: 1.1;
-      color: ${form === "nacional" ? "#5eff00" : "#1d4ed8"};
+      color: ${form === "nacional" ? "#5eff00" : "#279a00"};
     ">
       ${bloque || "(sin bloque)"}
     </div>
