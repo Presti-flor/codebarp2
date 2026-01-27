@@ -63,8 +63,8 @@ function makeFormBarcode(fid) {
 // Fin de corte: variedad|tamano
 const BLOQUE_CONFIG = {
   "1": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
-    nacional: ["freedom"],
+    fin_corte: ["vendela|na", "pink floyd|na"],
+    nacional: ["vendela, pink floyd"],
   },
   "1.1": {
     fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
