@@ -253,7 +253,7 @@ app.get("/", (req, res) => {
 <title>${isNacional ? "Registro Nacional" : "Fin de Corte"}</title>
 <style>
   :root{
-    --primary: ${isNacional ? "#ff0000" : "#f51111"};
+    --primary: ${isNacional ? "#ff0000" : "#3cff00"};
     --soft: ${isNacional ? "rgba(255, 0, 0, 0.12)" : "rgba(91, 255, 14, 0.12)"};
   }
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:system-ui;background:#f5f7fb;padding:18px;}
@@ -305,7 +305,7 @@ app.get("/", (req, res) => {
       font-weight: 900;
       letter-spacing: 0.18em;
       line-height: 1.1;
-      color: ${form === "nacional" ? "#5eff00" : "#279a00"};
+      color: ${form === "nacional" ? "#ec0303" : "#41cd12"};
     ">
       ${bloque || "(sin bloque)"}
     </div>
