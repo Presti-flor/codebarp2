@@ -64,7 +64,7 @@ function makeFormBarcode(fid) {
 const BLOQUE_CONFIG = {
   "1": {
     fin_corte: ["vendela|na", "pink floyd|na"],
-    nacional: ["vendela, pink floyd"],
+    nacional: ["vendela", "pink floyd"],
   },
   "1.1": {
     fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
