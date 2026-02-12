@@ -68,8 +68,8 @@ const BLOQUE_CONFIG = {
   },
 
   "2": {
-    fin_corte: ["coral reff|na", "hummer|na"],
-    nacional: ["coral reff", "hummer"],
+    fin_corte: ["coral reff|na", "hummer|na", "momentum|na"],
+    nacional: ["coral reff", "hummer", "momentum"],
   },
 
   "3": {
@@ -378,6 +378,42 @@ app.post("/submit", async (req, res) => {
   if (!fid || !bloque || !seleccion || !tallos) {
     return res.status(400).send("Datos incompletos");
   }
+  // ================== API PARA POWERSHELL / ESCÁNER ==================
+// Recibe: /api/registrar_code?code=XXXXXXXX&etapa=Ingreso
+// ================== API PARA POWERSHELL / ESCÁNER ==================
+app.get("/api/registrar_code", async (req, res) => {
+  try {
+    const code = String(req.query.code || "").trim();
+    const etapa = "Ingreso"; //  FIJA
+
+    if (!code || !/^\d+$/.test(code)) {
+      return res.status(400).json({ status: "FAIL", message: "code inválido" });
+    }
+
+    const barcode = code;
+    const tipo = code.slice(0, 2);
+    const serial = code.slice(2);
+
+    const q = `
+      INSERT INTO registros (barcode, tipo, serial, etapa, form, form_id)
+      VALUES ($1, $2, $3, $4, NULL, NULL)
+      ON CONFLICT (barcode) DO NOTHING
+      RETURNING barcode;
+    `;
+
+    const r = await pool.query(q, [barcode, tipo, serial, etapa]);
+
+    if (r.rowCount === 0) {
+      return res.json({ status: "OK", message: "YA EXISTE", etapa });
+    }
+
+    return res.json({ status: "OK", barcode: r.rows[0].barcode, etapa });
+
+  } catch (err) {
+    console.error("[ERROR /api/registrar_code]", err);
+    return res.status(500).json({ status: "FAIL", message: err.message });
+  }
+});
 
   // valida selección contra bloque/form
   const opciones = getOptionsFor(bloque, form);
