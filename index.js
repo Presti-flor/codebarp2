@@ -44,18 +44,6 @@ function makeFormBarcode(fid) {
   return { tipo, serial, barcode };
 }
 
-async function safeJsonFromResponse(respuesta) {
-  const texto = await respuesta.text();
-
-  try {
-    return JSON.parse(texto);
-  } catch (e) {
-    console.error("❌ Respuesta no JSON del backend principal:");
-    console.error(texto);
-    throw new Error("El backend principal devolvió HTML o una respuesta inválida");
-  }
-}
-
 // ================== CONFIG BLOQUES ==================
 const BLOQUE_CONFIG = {
   "1": {
@@ -87,15 +75,26 @@ const BLOQUE_CONFIG = {
     nacional: ["freedom", "hilux"],
   },
   "5": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
   "6": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
   "7": {
-    fin_corte: ["candlelight|na", "deep purple|na"],
+    fin_corte: [
+      "candlelight|na",
+      "deep purple|na",
+    ],
     nacional: ["candlelight", "deep purple"],
   },
   "8": {
@@ -107,11 +106,21 @@ const BLOQUE_CONFIG = {
       "sommersand|na",
       "star platinum|na",
       "high magic|na",
-      "momentum|na",    ],
-    nacional: ["candlelight", "freedom", "sommersand", "star platinum", "high magic", "momentum"],
+      "momentum|na",
+    ],
+    nacional: [
+      "candlelight",
+      "freedom",
+      "sommersand",
+      "star platinum",
+    ],
   },
   "9": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
   "10": {
@@ -142,7 +151,11 @@ const BLOQUE_CONFIG = {
     nacional: ["blessing", "mondial", "pink amareto", "sommersand"],
   },
   "13": {
-    fin_corte: ["freedom|largo", "freedom|corto", "freedom|ruso"],
+    fin_corte: [
+      "freedom|largo",
+      "freedom|corto",
+      "freedom|ruso",
+    ],
     nacional: ["freedom"],
   },
 };
@@ -224,6 +237,7 @@ app.get("/", (req, res) => {
   input,select{width:100%;padding:12px;border-radius:12px;border:1px solid #e2e8f0;font-size:1rem;outline:none;}
   input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--soft);}
   button{width:100%;margin-top:18px;padding:14px;border-radius:999px;border:none;font-weight:900;background:var(--primary);color:#fff;cursor:pointer;}
+  @media(max-width:520px){}
 </style>
 </head>
 <body>
@@ -289,14 +303,16 @@ app.get("/api/registrar_code", async (req, res) => {
 
     const respuesta = await fetch(`${MAIN_BACKEND_URL}/api/escanear`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         barcode: code,
         form: ""
       })
     });
 
-    const data = await safeJsonFromResponse(respuesta);
+    const data = await respuesta.json();
 
     if (!respuesta.ok || !data.ok) {
       return res.status(400).json({
@@ -355,7 +371,9 @@ app.post("/submit", async (req, res) => {
 
     const respuesta = await fetch(`${MAIN_BACKEND_URL}/guardar`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         barcode,
         tipo,
@@ -371,7 +389,7 @@ app.post("/submit", async (req, res) => {
       })
     });
 
-    const data = await safeJsonFromResponse(respuesta);
+    const data = await respuesta.json();
 
     if (!respuesta.ok || !data.ok) {
       const mensaje = data.error || "No se pudo guardar";
@@ -448,7 +466,7 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-// ================== LISTEN ==================
+// ================== LISTEN ==============
 app.listen(port, () => {
   console.log(`✅ Servidor activo en http://localhost:${port}`);
 });
