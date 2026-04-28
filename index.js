@@ -128,13 +128,16 @@ const BLOQUE_CONFIG = {
       "freedom|ruso",
       "sommersand|na",
       "star platinum|na",
+      "high magic|na",
+      "momentum|na",
     ],
     nacional: [
       "candlelight",
       "freedom",
       "sommersand",
       "star platinum",
-    ],
+      "high magic",
+      "momentum",    ],
   },
 
   "9": {
