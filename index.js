@@ -63,13 +63,13 @@ function makeFormBarcode(fid) {
 // Fin de corte: variedad|tamano
 const BLOQUE_CONFIG = {
   "1": {
-    fin_corte: ["vendela|na", "pink floyd|na", "swan|na"],
-    nacional: ["vendela", "pink floyd", "swan", "momentum"],
+    fin_corte: ["vendela|na", "pink floyd|na"],
+    nacional: ["vendela", "pink floyd"],
   },
 
   "2": {
-    fin_corte: ["coral reff|na", "hummer|na", "momentum|na"],
-    nacional: ["coral reff", "hummer", "momentum"],
+    fin_corte: ["coral reff|na", "hummer|na", "momentum|na", "swan|na"],
+    nacional: ["coral reff", "hummer", "momentum", "swan"],
   },
 
   "3": {
