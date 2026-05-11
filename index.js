@@ -397,12 +397,42 @@ app.get("/api/registrar_code", async (req, res) => {
     const tipo = code.slice(0, 2);
     const serial = code.slice(2);
 
-    const q = `
-      INSERT INTO registros (barcode, tipo, serial, etapa, form, form_id)
-      VALUES ($1, $2, $3, $4, NULL, NULL)
-      ON CONFLICT (barcode) DO NOTHING
-      RETURNING barcode;
-    `;
+    const viajeActivo = "VIAJE 1"; // <- TEMPORAL o dinámico después
+
+const q = `
+  INSERT INTO registros
+  (
+    barcode,
+    tipo,
+    serial,
+    variedad,
+    bloque,
+    tamano,
+    tallos,
+    etapa,
+    form,
+    form_id,
+    viaje,
+    resultado
+  )
+  VALUES
+  (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5::numeric,
+    $6,
+    $7::int,
+    $8,
+    $9,
+    $10,
+    $11,
+    'OK'
+  )
+  ON CONFLICT (form_id) DO NOTHING
+  RETURNING barcode;
+`;
 
     const r = await pool.query(q, [barcode, tipo, serial, etapa]);
 
@@ -451,18 +481,21 @@ if (form !== "nacional" && parsed.tamano) {
       RETURNING barcode;
     `;
 
-    const r = await pool.query(q, [
-      barcode,
-      tipo,
-      serial,
-      variedad,
-      bloque,
-      form === "nacional" ? null : tamano,
-      tallosNum,
-      etapa || "Ingreso",
-      form,
-      fid,
-    ]);
+    const viajeActivo = "VIAJE 1"; // mismo viaje del panel principal
+
+const r = await pool.query(q, [
+  barcode,
+  tipo,
+  serial,
+  variedad,
+  bloque,
+  form === "nacional" ? null : tamano,
+  tallosNum,
+  etapa || "Ingreso",
+  form,
+  fid,
+  viajeActivo
+]);
 
     if (r.rowCount === 0) {
   return res.status(400).send(`
