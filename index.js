@@ -513,7 +513,7 @@ if (form !== "nacional" && parsed.tamano) {
   RETURNING barcode;
 `;
 
-   const viajeActivo = "VIAJE 1";
+   const viajeActivo = "Viaje 1";
 
 const r = await pool.query(q, [
   barcode,
