@@ -486,9 +486,15 @@ app.post("/submit", async (req, res) => {
       );
     }
 
-    const viajeRes = await fetch(
-      "https://entradaposcop2conteos-production.up.railway.app/api/viaje-activo"
-    );
+    const viajeActivo = Object.keys(sesionesViaje)
+  .find(nombre => sesionesViaje[nombre]?.activa === true);
+
+if (!viajeActivo) {
+
+  return res.status(400).send(
+    "No hay viaje activo"
+  );
+}
 
     const viajeJson = await viajeRes.json();
 
