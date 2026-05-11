@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const express = require("express");
@@ -9,6 +8,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(express.urlencoded({
+  extended: true
+}));
+
 app.use(express.static(path.join(__dirname, "public")));
 
 const pool = new Pool({
@@ -22,6 +26,7 @@ const pool = new Pool({
 // CONEXIÓN
 // =====================================================
 (async () => {
+
   try {
 
     const c = await pool.connect();
@@ -34,6 +39,7 @@ const pool = new Pool({
 
     console.error("❌ Error conexión:", e.message);
   }
+
 })();
 
 // =====================================================
@@ -69,6 +75,7 @@ function parseCode(codeRaw) {
   const code = String(codeRaw || "").trim();
 
   if (!/^\d+$/.test(code)) {
+
     throw new Error("Barcode inválido");
   }
 
@@ -85,7 +92,7 @@ function parseCode(codeRaw) {
 // =====================================================
 // VIAJE ACTIVO
 // =====================================================
-app.get("/api/viaje-activo", async (req, res) => {
+app.get("/api/viaje-activo", async (_req, res) => {
 
   try {
 
@@ -425,7 +432,8 @@ app.get("/api/viajes/:nombre/detalle", async (req, res) => {
         tallos,
         etapa,
         form_id,
-        created_at
+        created_at,
+        viaje
       FROM registros
       WHERE viaje = $1
       ORDER BY created_at DESC
@@ -449,6 +457,7 @@ app.get("/api/viajes/:nombre/detalle", async (req, res) => {
     });
   }
 });
+
 // =====================================================
 // SUBMIT FORMULARIO
 // =====================================================
@@ -456,17 +465,28 @@ app.post("/submit", async (req, res) => {
 
   try {
 
-    const fid = String(req.body.fid || "").trim();
-    const bloque = String(req.body.bloque || "").trim();
-    const etapa = String(req.body.etapa || "Ingreso").trim();
-    const form = String(req.body.form || "fin_corte").trim();
+    const body = req.body || {};
+
+    const fid = String(body.fid || "").trim();
+
+    const bloque = String(
+      body.bloque || ""
+    ).trim();
+
+    const etapa = String(
+      body.etapa || "Ingreso"
+    ).trim();
+
+    const form = String(
+      body.form || "fin_corte"
+    ).trim();
 
     const seleccion = String(
-      req.body.seleccion || ""
+      body.seleccion || ""
     ).trim();
 
     const tallosNum = parseInt(
-      req.body.tallos || "0",
+      body.tallos || "0",
       10
     );
 
@@ -478,15 +498,14 @@ app.post("/submit", async (req, res) => {
     }
 
     const viajeActivo = Object.keys(sesionesViaje)
-  .find(nombre => sesionesViaje[nombre]?.activa === true);
+      .find(nombre => sesionesViaje[nombre]?.activa === true);
 
-if (!viajeActivo) {
+    if (!viajeActivo) {
 
-  return res.status(400).send(
-    "No hay viaje activo"
-  );
-}
-
+      return res.status(400).send(
+        "No hay viaje activo"
+      );
+    }
 
     let variedad = seleccion;
     let tamano = null;
@@ -565,6 +584,7 @@ if (!viajeActivo) {
     return res.status(500).send(err.message);
   }
 });
+
 // =====================================================
 // CONSULTA BARCODE
 // =====================================================
