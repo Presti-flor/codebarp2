@@ -410,8 +410,8 @@ const q = `
     tamano,
     tallos,
     etapa,
-    form,
     form_id,
+    form,
     viaje
   )
   VALUES (
@@ -431,7 +431,19 @@ const q = `
   RETURNING barcode;
 `;
 
-    const r = await pool.query(q, [barcode, tipo, serial, etapa]);
+    const r = await pool.query(q, [
+  barcode,
+  tipo,
+  serial,
+  variedad,
+  bloque,
+  form === "nacional" ? null : tamano,
+  tallosNum,
+  etapa || "Ingreso",
+  fid,
+  form,
+  viajeActivo
+]);
 
     if (r.rowCount === 0) {
       return res.json({ status: "OK", message: "YA EXISTE", etapa });
