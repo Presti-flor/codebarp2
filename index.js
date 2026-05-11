@@ -95,15 +95,19 @@ function parseCode(codeRaw) {
 // =====================================================
 // VIAJE ACTIVO
 // =====================================================
+// =====================================================
+// VIAJE ACTIVO DESDE POSTGRESQL
+// =====================================================
 app.get("/api/viaje-activo", async (_req, res) => {
-
   try {
+    const r = await pool.query(`
+      SELECT valor
+      FROM sistema_estado
+      WHERE clave = 'viaje_activo'
+      LIMIT 1
+    `);
 
-    const viajeActivo = Object.keys(sesionesViaje)
-      .find(nombre => sesionesViaje[nombre]?.activa === true);
-
-    if (!viajeActivo) {
-
+    if (!r.rows.length) {
       return res.json({
         ok: false,
         error: "No hay viaje activo"
@@ -112,12 +116,11 @@ app.get("/api/viaje-activo", async (_req, res) => {
 
     return res.json({
       ok: true,
-      viaje: viajeActivo
+      viaje: r.rows[0].valor
     });
 
   } catch (err) {
-
-    console.error(err);
+    console.error("Error /api/viaje-activo:", err);
 
     return res.status(500).json({
       ok: false,
@@ -137,14 +140,14 @@ app.get("/api/viajes", async (_req, res) => {
   });
 });
 
+// =====================================================
+// ACTIVAR VIAJE
+// =====================================================
 app.post("/api/viajes/activar", async (req, res) => {
-
   try {
-
     const nombre = String(req.body.nombre || "").trim();
 
     if (!nombre) {
-
       return res.status(400).json({
         ok: false,
         error: "Falta nombre"
@@ -152,11 +155,19 @@ app.post("/api/viajes/activar", async (req, res) => {
     }
 
     Object.keys(sesionesViaje).forEach(v => {
-
       sesionesViaje[v].activa = false;
     });
 
     asegurarViaje(nombre).activa = true;
+
+    await pool.query(`
+      INSERT INTO sistema_estado (clave, valor, updated_at)
+      VALUES ('viaje_activo', $1, NOW())
+      ON CONFLICT (clave)
+      DO UPDATE SET
+        valor = EXCLUDED.valor,
+        updated_at = NOW()
+    `, [nombre]);
 
     return res.json({
       ok: true,
@@ -167,6 +178,7 @@ app.post("/api/viajes/activar", async (req, res) => {
     });
 
   } catch (err) {
+    console.error("Error activando viaje:", err);
 
     return res.status(500).json({
       ok: false,
