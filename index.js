@@ -399,9 +399,10 @@ app.get("/api/registrar_code", async (req, res) => {
 
     const viajeActivo = "VIAJE 1"; // <- TEMPORAL o dinámico después
 
+const viajeActivo = "VIAJE 1";
+
 const q = `
-  INSERT INTO registros
-  (
+  INSERT INTO registros (
     barcode,
     tipo,
     serial,
@@ -412,11 +413,9 @@ const q = `
     etapa,
     form,
     form_id,
-    viaje,
-    resultado
+    viaje
   )
-  VALUES
-  (
+  VALUES (
     $1,
     $2,
     $3,
@@ -427,8 +426,7 @@ const q = `
     $8,
     $9,
     $10,
-    $11,
-    'OK'
+    $11
   )
   ON CONFLICT (form_id) DO NOTHING
   RETURNING barcode;
