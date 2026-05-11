@@ -1,3 +1,13 @@
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use(express.urlencoded({
+  extended: true
+}));
+
+app.use(express.static(path.join(__dirname, "public")));
 require("dotenv").config();
 
 const express = require("express");
@@ -448,7 +458,126 @@ app.get("/api/viajes/:nombre/detalle", async (req, res) => {
     });
   }
 });
+// =====================================================
+// SUBMIT FORMULARIO
+// =====================================================
+app.post("/submit", async (req, res) => {
 
+  try {
+
+    const fid = String(req.body.fid || "").trim();
+    const bloque = String(req.body.bloque || "").trim();
+    const etapa = String(req.body.etapa || "Ingreso").trim();
+    const form = String(req.body.form || "fin_corte").trim();
+
+    const seleccion = String(
+      req.body.seleccion || ""
+    ).trim();
+
+    const tallosNum = parseInt(
+      req.body.tallos || "0",
+      10
+    );
+
+    if (!fid || !bloque || !seleccion || !tallosNum) {
+
+      return res.status(400).send(
+        "Datos incompletos"
+      );
+    }
+
+    const viajeRes = await fetch(
+      "https://entradaposcop2conteos-production.up.railway.app/api/viaje-activo"
+    );
+
+    const viajeJson = await viajeRes.json();
+
+    if (!viajeJson.ok) {
+
+      return res.status(400).send(
+        "No hay viaje activo"
+      );
+    }
+
+    const viajeActivo = viajeJson.viaje;
+
+    let variedad = seleccion;
+    let tamano = null;
+
+    if (seleccion.includes("|")) {
+
+      const parts = seleccion.split("|");
+
+      variedad = parts[0];
+
+      tamano = parts[1] || null;
+
+      if (tamano === "na") {
+        tamano = null;
+      }
+    }
+
+    const barcode = `99${Date.now()}`;
+
+    const tipo = "99";
+
+    const serial = String(Date.now());
+
+    const q = `
+      INSERT INTO registros (
+        barcode,
+        tipo,
+        serial,
+        variedad,
+        bloque,
+        tamano,
+        tallos,
+        etapa,
+        form,
+        form_id,
+        viaje
+      )
+      VALUES (
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11
+      )
+      ON CONFLICT (form_id)
+      DO NOTHING
+      RETURNING barcode
+    `;
+
+    const r = await pool.query(q, [
+      barcode,
+      tipo,
+      serial,
+      variedad,
+      bloque,
+      tamano,
+      tallosNum,
+      etapa,
+      form,
+      fid,
+      viajeActivo
+    ]);
+
+    if (!r.rowCount) {
+
+      return res.send(
+        "YA REGISTRADO"
+      );
+    }
+
+    return res.send(`
+      <h1>✅ Registro exitoso</h1>
+      <p>Viaje: ${viajeActivo}</p>
+    `);
+
+  } catch (err) {
+
+    console.error(err);
+
+    return res.status(500).send(err.message);
+  }
+});
 // =====================================================
 // CONSULTA BARCODE
 // =====================================================
