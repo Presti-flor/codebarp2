@@ -500,15 +500,18 @@ app.post("/submit", async (req, res) => {
       );
     }
 
-    const viajeActivo = Object.keys(sesionesViaje)
-      .find(nombre => sesionesViaje[nombre]?.activa === true);
+    const viajeActivoRes = await pool.query(`
+  SELECT valor
+  FROM sistema_estado
+  WHERE clave = 'viaje_activo'
+  LIMIT 1
+`);
 
-    if (!viajeActivo) {
+if (!viajeActivoRes.rows.length) {
+  return res.status(400).send("No hay viaje activo");
+}
 
-      return res.status(400).send(
-        "No hay viaje activo"
-      );
-    }
+const viajeActivo = viajeActivoRes.rows[0].valor;
 
     let variedad = seleccion;
     let tamano = null;
@@ -533,40 +536,40 @@ app.post("/submit", async (req, res) => {
     const serial = String(Date.now());
 
     const q = `
-      INSERT INTO registros (
-        barcode,
-        tipo,
-        serial,
-        variedad,
-        bloque,
-        tamano,
-        tallos,
-        etapa,
-        form,
-        form_id,
-        viaje
-      )
-      VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11
-      )
-      ON CONFLICT (form_id)
-      DO NOTHING
-      RETURNING barcode
-    `;
+  INSERT INTO registros (
+    barcode,
+    tipo,
+    serial,
+    variedad,
+    bloque,
+    tamano,
+    tallos,
+    etapa,
+    form,
+    form_id,
+    viaje
+  )
+  VALUES (
+    $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11
+  )
+  ON CONFLICT (form_id)
+  DO NOTHING
+  RETURNING barcode
+`;
 
-    const r = await pool.query(q, [
-      barcode,
-      tipo,
-      serial,
-      variedad,
-      bloque,
-      tamano,
-      tallosNum,
-      etapa,
-      form,
-      fid,
-      viajeActivo
-    ]);
+const r = await pool.query(q, [
+  barcode,
+  tipo,
+  serial,
+  variedad,
+  bloque,
+  tamano,
+  tallosNum,
+  etapa,
+  form,
+  fid,
+  viajeActivo
+]);
 
     if (!r.rowCount) {
 
