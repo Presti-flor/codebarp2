@@ -46,6 +46,9 @@ const pool = new Pool({
 // VIAJES EN MEMORIA
 // =====================================================
 const sesionesViaje = {};
+sesionesViaje["Viaje 1"] = {
+  activa: true
+};
 
 function getViajesFijos() {
 
