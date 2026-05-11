@@ -399,7 +399,6 @@ app.get("/api/registrar_code", async (req, res) => {
 
     const viajeActivo = "VIAJE 1"; // <- TEMPORAL o dinámico después
 
-const viajeActivo = "VIAJE 1";
 
 const q = `
   INSERT INTO registros (
