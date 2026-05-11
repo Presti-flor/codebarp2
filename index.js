@@ -370,20 +370,6 @@ app.get("/", (req, res) => {
 });
 
 // ================== SUBMIT (POST) ==================
-app.post("/submit", async (req, res) => {
-  const fid = String(req.body.fid || "").trim();
-  const bloque = String(req.body.bloque || "").trim();
-  const etapa = String(req.body.etapa || "Ingreso").trim();
-  const form = String(req.body.form || "fin_corte").toLowerCase().trim();
-  const seleccion = String(req.body.seleccion || "").trim();
-  const tallos = req.body.tallos;
-
-  if (!fid || !bloque || !seleccion || !tallos) {
-    return res.status(400).send("Datos incompletos");
-  }
-  // ================== API PARA POWERSHELL / ESCÁNER ==================
-// Recibe: /api/registrar_code?code=XXXXXXXX&etapa=Ingreso
-// ================== API PARA POWERSHELL / ESCÁNER ==================
 app.get("/api/registrar_code", async (req, res) => {
   try {
     const code = String(req.query.code || "").trim();
@@ -456,6 +442,21 @@ const r = await pool.query(q, [
     return res.status(500).json({ status: "FAIL", message: err.message });
   }
 });
+app.post("/submit", async (req, res) => {
+  const fid = String(req.body.fid || "").trim();
+  const bloque = String(req.body.bloque || "").trim();
+  const etapa = String(req.body.etapa || "Ingreso").trim();
+  const form = String(req.body.form || "fin_corte").toLowerCase().trim();
+  const seleccion = String(req.body.seleccion || "").trim();
+  const tallos = req.body.tallos;
+
+  if (!fid || !bloque || !seleccion || !tallos) {
+    return res.status(400).send("Datos incompletos");
+  }
+  // ================== API PARA POWERSHELL / ESCÁNER ==================
+// Recibe: /api/registrar_code?code=XXXXXXXX&etapa=Ingreso
+// ================== API PARA POWERSHELL / ESCÁNER ==================
+
 
   // valida selección contra bloque/form
   const opciones = getOptionsFor(bloque, form);
@@ -482,15 +483,37 @@ if (form !== "nacional" && parsed.tamano) {
 
   try {
     const q = `
-      INSERT INTO registros
-      (barcode, tipo, serial, variedad, bloque, tamano, tallos, etapa, form, form_id)
-      VALUES
-      ($1,$2,$3,$4,$5::numeric,$6,$7::int,$8,$9,$10)
-      ON CONFLICT (form_id) DO NOTHING
-      RETURNING barcode;
-    `;
+  INSERT INTO registros (
+    barcode,
+    tipo,
+    serial,
+    variedad,
+    bloque,
+    tamano,
+    tallos,
+    etapa,
+    form,
+    form_id,
+    viaje
+  )
+  VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5::numeric,
+    $6,
+    $7::int,
+    $8,
+    $9,
+    $10,
+    $11
+  )
+  ON CONFLICT (form_id) DO NOTHING
+  RETURNING barcode;
+`;
 
-    const viajeActivo = "VIAJE 1"; // mismo viaje del panel principal
+   const viajeActivo = "VIAJE 1";
 
 const r = await pool.query(q, [
   barcode,
