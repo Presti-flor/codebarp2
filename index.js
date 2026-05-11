@@ -431,7 +431,7 @@ const q = `
   RETURNING barcode;
 `;
 
-    const r = await pool.query(q, [
+const r = await pool.query(q, [
   barcode,
   tipo,
   serial,
