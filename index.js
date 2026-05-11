@@ -513,7 +513,15 @@ if (form !== "nacional" && parsed.tamano) {
   RETURNING barcode;
 `;
 
-   const viajeActivo = "Viaje 1";
+   const viajeRes = await fetch("https://entradaposcop2conteos-production.up.railway.app/api/viaje-activo");
+
+const viajeJson = await viajeRes.json();
+
+if (!viajeJson.ok) {
+  return res.status(400).send("No hay viaje activo");
+}
+
+const viajeActivo = viajeJson.viaje;
 
 const r = await pool.query(q, [
   barcode,
